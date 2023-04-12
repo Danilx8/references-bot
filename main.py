@@ -1,7 +1,8 @@
 import telebot
 from telebot.util import quick_markup
+from Token import token
 
-bot = telebot.TeleBot("5624515371:AAGKpjNwEebG6XrbBFvsdU5hULFZJ12GHEI")
+bot = telebot.TeleBot(token)
 bot.set_my_commands([
     telebot.types.BotCommand("/start", "Главное меню"),
     telebot.types.BotCommand("/close", "Спрятать клавиатуру")
