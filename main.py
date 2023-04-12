@@ -3,7 +3,8 @@ from telebot.util import quick_markup
 
 bot = telebot.TeleBot("5624515371:AAGKpjNwEebG6XrbBFvsdU5hULFZJ12GHEI")
 bot.set_my_commands([
-    telebot.types.BotCommand("/start", "main menu"),
+    telebot.types.BotCommand("/start", "Главное меню"),
+    telebot.types.BotCommand("/close", "Спрятать клавиатуру")
 ])
 
 references_markup = quick_markup({
@@ -12,11 +13,21 @@ references_markup = quick_markup({
         'DevOps': {'callback_data': 'dev_ops'}},
         row_width=1)
 
+
 @bot.message_handler(commands=['start'])
 def initialize(message):
     tid = message.chat.id
     bot.send_message(tid, '<b>Привет!</b>\n\nВыбери желаемую опцию из приведённых ниже:', parse_mode='HTML',
                      reply_markup=references_markup)
+    new_markup = telebot.types.ReplyKeyboardMarkup()
+    new_markup.row('Новая кнопка!')
+    bot.send_message(tid, 'Клавиатура создана!', reply_markup=new_markup)
+
+
+@bot.message_handler(commands=['close'])
+def close_keyboard(message):
+    new_markup = telebot.types.ReplyKeyboardRemove()
+    bot.send_message(message.chat.id, 'Клавиатура удалена!', reply_markup=new_markup)
 
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -57,4 +68,4 @@ def callback_query(call):
                               message_id=call.message.message_id)
 
 
-bot.infinity_polling()
+bot.polling(none_stop=True)
